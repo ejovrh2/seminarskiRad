@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chat aplikacija u sklopu edukacije na Algebri">
+    <meta name="author" content="Hrvoje Lovrić">
+    <script src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <title>Chat aplikacija</title>
+</head>
+<body>
+    <div id="enterUsername">
+        <label for="username">Upiši korisničko ime:</label>
+        <input type="text" id="username" placeholder="Upiši korisničko ime">
+        <button onclick="startChat()">Započni chat</button>
+      </div>
+    
+      <div id="error-message" class="hidden">Upiši više od 4 slova</div>
+      <div id="error-userExist" class="hidden">Korisnik već psotoji, odaberi drugo ime</div>
+</body>
+</html>
