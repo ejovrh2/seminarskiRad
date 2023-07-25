@@ -11,7 +11,7 @@ ROOM_NAME='room-name'
  
  **Features**
  v 0.0.1
- - [ ] enter username
+ - [x] enter username
  - [ ] check if username exist
  - [ ] give user random color for message display
  - [ ] list all members in room
