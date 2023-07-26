@@ -49,7 +49,7 @@
 
           <div class="col-md-9">
             <div class="message-display">
-              <h2>Message Display</h2>
+              <h2>Poruke</h2>
               <div class="message">
                 <p class="message-text bg-light">This is a message from User 1</p>
                 <p class="message-user text-muted">User 1</p>
@@ -67,7 +67,6 @@ const CHANNEL_ID = 'CsGJlnTCye0VPhos'
 const ROOM_NAME='observable-ChatApp'
 let username = [];
 let color=getRandomColor()
-let members = [];
 
 
 document.getElementById("btnLogin").addEventListener("click", function(event){
@@ -97,7 +96,8 @@ function connectToScaladrone(username){
     const drone = new ScaleDrone(CHANNEL_ID,{
         data: {
          name: username,
-         color: color
+         color: color,
+         timeNow:Date.now()
        },
       });
 
@@ -165,12 +165,18 @@ function addUser(member){
     let noviName=member.clientData.name
             let noviColor=member.clientData.color
             let userId=member.id
+            let joinOn=new Date(member.clientData.timeNow)
+            let span=document.createElement("span")
+
             let ulPopisKorisnika=document.getElementById('popisKorinsika')
             var liElement = document.createElement("li");
             liElement.style.color =noviColor;
-            liElement.className='list-group-item'
+            liElement.className='list-group-item left'
             liElement.textContent = noviName;
             liElement.id=userId
+            span.textContent=joinOn.toLocaleString()
+            span.className='right'
+            liElement.appendChild(span)
             ulPopisKorisnika.appendChild(liElement);
 }
 
@@ -183,12 +189,18 @@ function whoIsIn(members){
         let name=element.clientData.name
         let color=element.clientData.color
         let userId=element.id
+        let joinOn=new Date(element.clientData.timeNow)
 
-        var liElement = document.createElement("li")
+        let span=document.createElement("span")
+        let liElement = document.createElement("li")
             liElement.style.color =color
-            liElement.className='list-group-item'
+            liElement.className='list-group-item left'
             liElement.textContent = name
             liElement.id=userId
+
+            span.textContent=joinOn.toLocaleString()
+            span.className='right'
+            liElement.appendChild(span)
             ulPopisKorisnika.appendChild(liElement)
         
        }

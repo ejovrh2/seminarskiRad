@@ -73,3 +73,10 @@
         margin-top: 100px; /* Add some top margin for spacing */
       }
 
+.right{
+  margin-left: 20px;
+ }
+
+ .left{
+  margin-left: 10px;
+ }

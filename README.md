@@ -13,6 +13,7 @@ ROOM_NAME='room-name'
  v 0.0.1
  - [x] enter username
  - [x] username lenght > 4
+ - [x] user join timestamp
  - [ ] check if username exist
  - [x] give user random color for message display
  - [x] list all members in room
