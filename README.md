@@ -13,9 +13,9 @@ ROOM_NAME='room-name'
  v 0.0.1
  - [x] enter username
  - [ ] check if username exist
- - [ ] give user random color for message display
- - [ ] list all members in room
- - [ ] update list members on new user join or leave
+ - [x] give user random color for message display
+ - [x] list all members in room
+ - [x] update list members on new user join or leave
  - [ ] send messages
  - [ ] display messages from users, with message display username and give user color from 
 
