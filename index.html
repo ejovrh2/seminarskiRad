@@ -6,18 +6,193 @@
     <meta name="description" content="Chat aplikacija u sklopu edukacije na Algebri">
     <meta name="author" content="Hrvoje Lovrić">
     <script src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Add this line in the head section of your HTML -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add this line before the closing body tag of your HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
 
-    <title>Chat aplikacija</title>
+    <title>Document</title>
 </head>
+<style>
+
+
+</style>
 <body>
-    <div id="enterUsername">
-        <label for="username">Upiši korisničko ime:</label>
-        <input type="text" id="username" placeholder="Upiši korisničko ime">
-        <button onclick="startChat()">Započni chat</button>
-      </div>
+   
+        <div id="loginPage"  class="login-form">
+          <h5 class="mb-4">Login</h5>
+          <form>
+            <div class="mb-3">
+              <label for="username" class="form-label">Username (minimum 4 characters):</label>
+              <input type="text" class="form-control" id="username" required>
+            </div>
+            <button id="btnLogin" type="submit" class="btn btn-primary">Login</button>
+            <div id="alert" class="alert alert-warning hidden" role="alert">
+                Username mora sadržavati više od 4 slova
+              </div>
+          </form>
+        </div>
+  
+
+      <div id="chat" class="container hidden">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="user-list">
+              <h2>Trenutni korisnici u sobi</h2>
+              <ul id="popisKorinsika" class="list-group">
     
-      <div id="error-message" class="hidden">Upiši više od 4 slova</div>
-      <div id="error-userExist" class="hidden">Korisnik već psotoji, odaberi drugo ime</div>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-9">
+            <div class="message-display">
+              <h2>Message Display</h2>
+              <div class="message">
+                <p class="message-text bg-light">This is a message from User 1</p>
+                <p class="message-user text-muted">User 1</p>
+              </div>
+           
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      <script>
+
+const CHANNEL_ID = 'CsGJlnTCye0VPhos'
+const ROOM_NAME='observable-ChatApp'
+let username = [];
+let color=getRandomColor()
+let members = [];
+
+
+document.getElementById("btnLogin").addEventListener("click", function(event){
+  event.preventDefault()
+
+    const usernameInput = document.getElementById('username')
+    const alertMessage=document.getElementById('alert')
+    const loginPage=document.getElementById('loginPage')
+    const chat=document.getElementById('chat')
+    let username = usernameInput.value.trim();
+
+      if (username.length <= 4) {
+        alertMessage.classList.remove('hidden')
+        //return false;
+      }
+      else{
+        
+        connectToScaladrone(username)
+       
+      }
+});
+
+
+function connectToScaladrone(username){
+    const usernameInput = document.getElementById('username')
+    username = usernameInput.value.trim();
+    const drone = new ScaleDrone(CHANNEL_ID,{
+        data: {
+         name: username,
+         color: color
+       },
+      });
+
+      drone.on('open', error => {
+       if (error) {
+         return console.error(error);
+       }
+       console.log("Povezan na Scaledrone")
+
+       const room = drone.subscribe(ROOM_NAME);
+      
+       room.on('open', error => {
+         if (error) {
+           return console.error(error);
+         }
+         console.log('Uspješno spojen u sobu '+ROOM_NAME)
+ 
+        const alertMessage=document.getElementById('alert')
+        const loginPage=document.getElementById('loginPage')
+        const chat=document.getElementById('chat')
+        alertMessage.classList.add('hidden')
+        loginPage.classList.add('hidden')
+        chat.classList.remove('hidden')
+       });
+
+    //ispisivat će korisnike koji su trenutno logirani
+       room.on('members', m => {
+       members = m;
+       whoIsIn(members)
+      });
+
+    //osvježit će listu ako se nekto pridruži chatu
+        room.on('member_join', member => {
+           addUser(member)
+        });
+
+    //osvježit će listu korisnika kada neki korisnik izađe iz sobe
+        room.on('member_leave', ({id}) => {
+            removeUser(id)
+        });
+
+    })
+
+
+}
+
+
+function removeUser(id){
+    console.log(id)
+        let userList = document.getElementById('popisKorinsika');
+        let listItems = userList.getElementsByTagName('li');
+      
+        for (let i = 0; i < listItems.length; i++) {
+           console.log(listItems[i].id)
+                if (listItems[i].id === id) {
+                   console.log("isto je")
+                  listItems[i].remove();
+                  break; 
+                }
+            }
+}
+
+
+function addUser(member){
+    let noviName=member.clientData.name
+            let noviColor=member.clientData.color
+            let userId=member.id
+            let ulPopisKorisnika=document.getElementById('popisKorinsika')
+            var liElement = document.createElement("li");
+            liElement.style.color =noviColor;
+            liElement.className='list-group-item'
+            liElement.textContent = noviName;
+            liElement.id=userId
+            ulPopisKorisnika.appendChild(liElement);
+}
+
+
+function whoIsIn(members){
+    for (let i = 0; i < members.length; i++) {
+        let ulPopisKorisnika=document.getElementById('popisKorinsika')
+        const element = members[i];
+        
+        let name=element.clientData.name
+        let color=element.clientData.color
+        let userId=element.id
+
+        var liElement = document.createElement("li")
+            liElement.style.color =color
+            liElement.className='list-group-item'
+            liElement.textContent = name
+            liElement.id=userId
+            ulPopisKorisnika.appendChild(liElement)
+        
+       }
+}
+      </script>
 </body>
 </html>
