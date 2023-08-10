@@ -5,8 +5,9 @@
 **#comingsoon** **#staytuned**
 
 Aplikacija koristi [Scaladrone](https://www.scaledrone.com/) za beckend.
-Potrebno je upisati 
-CHANNEL_ID = 'yours-id'
+Potrebno je upisati   
+
+CHANNEL_ID = 'yours-id'  
 ROOM_NAME='room-name'
  
  **Features**
