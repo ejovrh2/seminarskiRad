@@ -18,7 +18,7 @@ ROOM_NAME='room-name'
  - [x] give user random color for message display
  - [x] list all members in room
  - [x] update list members on new user join or leave
- - [ ] send messages
- - [ ] display messages from users, with message display username and give user color from 
+ - [x] send messages
+ - [x] display messages from users, with message display username and give user color from 
 
 #
