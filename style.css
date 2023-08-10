@@ -18,11 +18,11 @@ body {
 
 .user-list ul {
   list-style: none;
-  padding: 0;
+  padding:0
 }
 
 .user-list li {
-  padding: 5px 0;
+  padding: 5px 10px;
   /* cursor: pointer; */
 }
 
@@ -48,7 +48,7 @@ body {
   padding: 6px;
   margin: 20px;
   background-color: #427531;
-  border-radius: 5px;
+  border-radius: 20px;
   color: aliceblue;
 }
 .message-content {
@@ -73,7 +73,7 @@ body {
   padding: 5px;
   border-radius: 5px;
   background-color: rgb(199, 237, 191);
-  color:white
+  color:black
 }
 
 .input-container button {
@@ -85,6 +85,7 @@ body {
 
 .button{
   background-color:  rgb(199, 237, 191);
+  color:black
 }
 
 .enterTime {
@@ -134,4 +135,10 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+
+li{
+  border-radius: 20px;
+  margin-bottom: 4px;
 }

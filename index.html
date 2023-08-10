@@ -38,7 +38,7 @@
     <div class="message-container">
       <div class="messages">
         <!-- Messages go here -->
-        <div class="message">
+        <!-- <div class="message">
           <div class="message-content">Hello!</div>
           <div class="sender">User 1</div>
         </div>
@@ -69,13 +69,12 @@
           <div class="message">
             <div class="message-content">Hi there!</div>
             <div class="sender">User 2</div>
-          </div>
-        
+          </div> -->
       </div>
       <div class="input-container">
         <!-- Input field for sending messages -->
-        <input type="text" placeholder="Type your message...">
-        <button class="button">Send</button>
+        <input id="messageInput" type="text" placeholder="Type your message...">
+        <button onclick="sendMessage()" class="button">Send</button>
       </div>
     </div>
   </div>
@@ -85,8 +84,9 @@
 
 const CHANNEL_ID = 'CsGJlnTCye0VPhos'
 const ROOM_NAME='observable-ChatApp'
-let username = [];
-let color=getRandomColor()
+const imeUsera=[]
+let dark=getRandomColorDark()
+let light=getRandomColorLight()
 
 
 document.getElementById("btnLogin").addEventListener("click", function(event){
@@ -103,7 +103,8 @@ document.getElementById("btnLogin").addEventListener("click", function(event){
         alert("username mora imati više od 4 i manje od 10 slova")
       }
       else{
-        
+        imeUsera.push(username)
+        console.log(imeUsera)
         connectToScaladrone(username)
        
       }
@@ -111,12 +112,12 @@ document.getElementById("btnLogin").addEventListener("click", function(event){
 
 
 function connectToScaladrone(username){
-    //const usernameInput = document.getElementById('username')
-    //username = usernameInput.value.trim();
+
     const drone = new ScaleDrone(CHANNEL_ID,{
         data: {
          name: username,
-         color: color,
+         color_dark: dark,
+         color_light: light,
          timeNow:Date.now()
        },
       });
@@ -126,6 +127,8 @@ function connectToScaladrone(username){
          return console.error(error);
        }
        console.log("Povezan na Scaledrone")
+
+
 
        const room = drone.subscribe(ROOM_NAME);
       
@@ -144,8 +147,15 @@ function connectToScaladrone(username){
 
     //ispisivat će korisnike koji su trenutno logirani
        room.on('members', m => {
+        
        members = m;
-       whoIsIn(members)
+       
+       var me = members.find(function(member) {
+        console.log(member.id === drone.clientId)
+        console.log(member.id) 
+        });
+        
+      whoIsIn(members)
       });
 
     //osvježit će listu ako se nekto pridruži chatu
@@ -158,8 +168,37 @@ function connectToScaladrone(username){
             removeUser(id)
         });
 
+
+
+        room.on('message', function(message) {
+        console.log(message.data)
+
+        const messageContainer = document.querySelector(".message-container .messages");
+    
+    const newMessage = document.createElement("div");
+    newMessage.classList.add("message");
+    
+    const messageContent = document.createElement("div");
+    messageContent.classList.add("message-content");
+    messageContent.textContent = message.data.text;
+    newMessage.style.backgroundColor = message.data.color_light;
+    newMessage.style.color = message.data.color_dark;
+    console.log(message.data)
+    const sender = document.createElement("div");
+    sender.classList.add("sender");
+    sender.textContent = message.data.sender[0];
+    
+    
+    newMessage.appendChild(messageContent);
+    newMessage.appendChild(sender);
+    
+    messageContainer.appendChild(newMessage);
+
+        });
+
     })
 
+ 
 
 }
 
@@ -180,50 +219,93 @@ function removeUser(id){
 }
 
 
-function addUser(member){
-    let noviName=member.clientData.name
-            let noviColor=member.clientData.color
+function addUser(member){ 
+
+
+            let noviName=member.clientData.name
+            let noviColorDark=member.clientData.color_dark
+            let noviColorLight=member.clientData.color_light
             let userId=member.id
             let joinOn=new Date(member.clientData.timeNow)
             let span=document.createElement("span")
 
             let ulPopisKorisnika=document.getElementById('user-list')
             var liElement = document.createElement("li");
-            liElement.style.color =noviColor;
-            //liElement.className='list-group-item left'
+            liElement.style.color =noviColorDark
             liElement.textContent = noviName;
             liElement.id=userId
+            liElement.style.backgroundColor=noviColorLight
             span.textContent=joinOn.toLocaleString()
             span.className='enterTime'
+
             liElement.appendChild(span)
             ulPopisKorisnika.appendChild(liElement);
 }
 
 
 function whoIsIn(members){
+
+
+
     for (let i = 0; i < members.length; i++) {
         let ulPopisKorisnika=document.getElementById('user-list')
         const element = members[i];
-        
+        console.log(element)
         let name=element.clientData.name
-        let color=element.clientData.color
+        let noviColorDark=element.clientData.color_dark
+        let noviColorLight=element.clientData.color_light
         let userId=element.id
         let joinOn=new Date(element.clientData.timeNow)
-
+ 
         let span=document.createElement("span")
         let liElement = document.createElement("li")
-            liElement.style.color =color
-            //liElement.className='list-group-item left'
+            liElement.style.backgroundColor=noviColorLight
             liElement.textContent = name
             liElement.id=userId
-
+            liElement.style.color = noviColorDark
             span.textContent=joinOn.toLocaleString()
             span.className='enterTime'
             liElement.appendChild(span)
             ulPopisKorisnika.appendChild(liElement)
-        
+            console.log(liElement.style.backgroundColor)
        }
+       
+
+
+
 }
+
+
+
+
+function sendMessage(){
+  console.log("heloo mesasage")
+  const messageInput = document.getElementById('messageInput');
+  const messageText = messageInput.value;
+  const drone = new Scaledrone(CHANNEL_ID,
+  {
+    data: "test" // Will be sent out as clientData via events
+})
+
+drone.on('open', error => {
+  if (error) {
+    return console.error(error);
+  }
+  drone.publish({
+    room: ROOM_NAME,
+    message: {
+    text:messageText,
+    sender:imeUsera,
+    color_dark:dark,
+    color_light:light
+    }
+  });
+  messageInput.value = '';
+});
+
+}
+
+
       </script>
 </body>
 </html>

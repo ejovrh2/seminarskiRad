@@ -1,10 +1,59 @@
-function getRandomColor(){
-    var color = [
-  "Red", "Green", "Blue", "Yellow", "Orange", "Purple", "Pink", "Cyan", "Magenta", "Lime",
-  "Teal", "Indigo", "Aquamarine", "Gold", "Silver", "Gray", "Brown", "Maroon", "Olive", "Navy",
-  "Orchid", "Peru", "Plum", "Salmon", "Sienna", "SlateBlue", "SteelBlue", "Tomato", "Turquoise", "Violet"
-];
-    return  color[getRandomInt(6)]
+function getRandomColorLight(){
+ 
+      colorLight = [
+        "white",
+        "antiquewhite",
+        "blanchedalmond",
+        "bisque",
+        "beige",
+        "cornsilk",
+        "ghostwhite",
+        "ivory",
+        "lavender",
+        "lightcoral",
+        "lightcyan",
+        "lightgoldenrodyellow",
+        "lightgray",
+        "lightpink",
+        "lightsalmon",
+        "lightseagreen",
+        "lightskyblue",
+        "lightslategray",
+        "lightsteelblue",
+        "lightyellow"
+      ];
+      
+
+    return  colorLight[getRandomInt(20)]
+}
+
+function getRandomColorDark(){
+ 
+  colorDark = [
+    "black",
+    "dimgray",
+    "darkslategray",
+    "midnightblue",
+    "navy",
+    "darkolivegreen",
+    "darkgreen",
+    "darkred",
+    "darkmagenta",
+    "darkorange",
+    "darkorchid",
+    "darkcyan",
+    "darkblue",
+    "darkviolet",
+    "darkgoldenrod",
+    "darkseagreen",
+    "darkturquoise",
+    "darkslateblue",
+    "darkkhaki",
+    "darkgray"
+  ];
+  
+
+return  colorDark[getRandomInt(20)]
 }
 
 function getRandomInt(max) {
